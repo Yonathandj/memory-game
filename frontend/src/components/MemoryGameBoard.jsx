@@ -6,37 +6,49 @@ import FailedModal from "./FailedModal";
 import SuccessModal from "./SuccessModal";
 import MemoryGameList from "./MemoryGameList";
 
-const MemoryGameBoard = ({ startGame }) => {
+const MemoryGameBoard = ({ startGame, setStartGame }) => {
   const [charNaruto, setCharNaruto] = useState([]);
   const [selectedCharId, setSelectedCharId] = useState([]);
-  console.log(selectedCharId);
+  const [level, setLevel] = useState(1);
 
   useEffect(() => {
     const getCharNaruto = async () => {
       try {
-        const response = await axios.get(
-          `https://www.narutodb.xyz/api/character?page=2&limit=6`
-        );
-        const char = response.data.characters;
-        setCharNaruto(char);
+        if (startGame) {
+          const response =
+            level > 1
+              ? await axios.get(
+                  `https://www.narutodb.xyz/api/character?page=2&limit=${
+                    3 + (level - 1)
+                  }`
+                )
+              : await axios.get(
+                  `https://www.narutodb.xyz/api/character?page=2&limit=3`
+                );
+          const char = response.data.characters;
+          setCharNaruto(char);
+        }
       } catch (err) {
         console.log(err.message);
       }
     };
     getCharNaruto();
     return setCharNaruto([]);
-  }, [startGame]);
+  }, [startGame, level]);
 
   const newCharReshuffle = _.shuffle(charNaruto);
   return (
     <React.Fragment>
       <div className="h-screen flex justify-center items-center">
         {_.uniq(selectedCharId).length !== selectedCharId.length ? (
-          <FailedModal />
+          <FailedModal setStartGame={setStartGame} setLevel={setLevel} />
         ) : _.uniq(selectedCharId).length === selectedCharId.length &&
           selectedCharId.length === newCharReshuffle.length &&
           selectedCharId.length > 0 ? (
-          <SuccessModal />
+          <SuccessModal
+            setLevel={setLevel}
+            setSelectedCharId={setSelectedCharId}
+          />
         ) : (
           <div className="grid grid-cols-3 gap-4">
             <MemoryGameList

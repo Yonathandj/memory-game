@@ -8,7 +8,7 @@ function App() {
   return (
     <React.Fragment>
       {startGame ? (
-        <MemoryGameBoard startGame={startGame} />
+        <MemoryGameBoard startGame={startGame} setStartGame={setStartGame} />
       ) : (
         <StartGame setStartGame={setStartGame} />
       )}
