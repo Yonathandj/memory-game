@@ -6,7 +6,14 @@ import FailedModal from "./FailedModal";
 import SuccessModal from "./SuccessModal";
 import MemoryGameList from "./MemoryGameList";
 
-const MemoryGameBoard = ({ startGame, setStartGame }) => {
+const MemoryGameBoard = ({
+  startGame,
+  setStartGame,
+  currentScore,
+  setCurrentScore,
+  bestScore,
+  setBestScore,
+}) => {
   const [charNaruto, setCharNaruto] = useState([]);
   const [selectedCharId, setSelectedCharId] = useState([]);
   const [level, setLevel] = useState(1);
@@ -18,9 +25,9 @@ const MemoryGameBoard = ({ startGame, setStartGame }) => {
           const response =
             level > 1
               ? await axios.get(
-                  `https://www.narutodb.xyz/api/character?page=2&limit=${
-                    3 + (level - 1)
-                  }`
+                  `https://www.narutodb.xyz/api/character?page=${
+                    level + 1
+                  }&limit=${3 + (level - 1)}`
                 )
               : await axios.get(
                   `https://www.narutodb.xyz/api/character?page=2&limit=3`
@@ -46,11 +53,12 @@ const MemoryGameBoard = ({ startGame, setStartGame }) => {
           selectedCharId.length === newCharReshuffle.length &&
           selectedCharId.length > 0 ? (
           <SuccessModal
+            level={level}
             setLevel={setLevel}
             setSelectedCharId={setSelectedCharId}
           />
         ) : (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-2">
             <MemoryGameList
               charNaruto={newCharReshuffle}
               selectedCharId={selectedCharId}
