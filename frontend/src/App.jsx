@@ -1,9 +1,13 @@
+import backgroundVid from "../public/background-vid.mp4";
+
 function App() {
   return (
     <>
-      <h2 className="text-2xl font-semibold">Hello World</h2>
+      <video playsInline autoPlay muted loop poster="naruto.jpg">
+        <source src={backgroundVid} type="video/mp4" />
+      </video>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
