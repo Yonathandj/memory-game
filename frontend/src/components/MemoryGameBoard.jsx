@@ -44,11 +44,27 @@ const MemoryGameBoard = ({
   }, [startGame, level]);
 
   const newCharReshuffle = _.shuffle(charNaruto);
+
+  function handleCurrentScore() {
+    _.uniq(selectedCharId).length === selectedCharId.length &&
+      setCurrentScore(currentScore + 1);
+  }
   return (
     <React.Fragment>
+      <div className="absolute bg-slate-800 opacity-80 p-5 top-5 left-5 rounded-lg text-slate-200 text-lg font-semibold tracking-wider">
+        <h4>Current Score: {currentScore}</h4>
+        <h4>Best Score: {bestScore}</h4>
+      </div>
       <div className="h-screen flex justify-center items-center">
         {_.uniq(selectedCharId).length !== selectedCharId.length ? (
-          <FailedModal setStartGame={setStartGame} setLevel={setLevel} />
+          <FailedModal
+            setLevel={setLevel}
+            bestScore={bestScore}
+            setBestScore={setBestScore}
+            setStartGame={setStartGame}
+            currentScore={currentScore}
+            setCurrentScore={setCurrentScore}
+          />
         ) : _.uniq(selectedCharId).length === selectedCharId.length &&
           selectedCharId.length === newCharReshuffle.length &&
           selectedCharId.length > 0 ? (
@@ -63,6 +79,7 @@ const MemoryGameBoard = ({
               charNaruto={newCharReshuffle}
               selectedCharId={selectedCharId}
               setSelectedCharId={setSelectedCharId}
+              handleCurrentScore={handleCurrentScore}
             />
           </div>
         )}
