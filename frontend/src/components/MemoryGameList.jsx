@@ -3,12 +3,7 @@ import Tilt from "react-parallax-tilt";
 
 import "../styles/MemoryGameList.css";
 
-const MemoryGameList = ({
-  charNaruto,
-  selectedCharId,
-  setSelectedCharId,
-  handleCurrentScore,
-}) => {
+const MemoryGameList = ({ charNaruto, selectedCharId, setSelectedCharId }) => {
   return (
     <React.Fragment>
       {charNaruto.map((char) => (
@@ -18,7 +13,6 @@ const MemoryGameList = ({
             id="memoryGameList"
             onClick={() => {
               setSelectedCharId([...selectedCharId, char.id]);
-              handleCurrentScore();
             }}
           >
             <img

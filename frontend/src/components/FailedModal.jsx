@@ -3,10 +3,6 @@ import React from "react";
 const FailedModal = ({
   setStartGame,
   setLevel,
-  currentScore,
-  setCurrentScore,
-  bestScore,
-  setBestScore,
 }) => {
   return (
     <React.Fragment>
@@ -27,10 +23,6 @@ const FailedModal = ({
               className="bg-slate-100 px-6 py-2 text-base rounded-lg mx-auto font-semibold active:bg-slate-900 active:text-slate-100 tracking-wide"
               onClick={() => {
                 setStartGame(false);
-                setCurrentScore(0);
-                setBestScore(
-                  currentScore > bestScore ? currentScore : bestScore
-                );
                 setLevel(1);
               }}
             >

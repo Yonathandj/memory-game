@@ -6,17 +6,13 @@ import FailedModal from "./FailedModal";
 import SuccessModal from "./SuccessModal";
 import MemoryGameList from "./MemoryGameList";
 
-const MemoryGameBoard = ({
-  startGame,
-  setStartGame,
-  currentScore,
-  setCurrentScore,
-  bestScore,
-  setBestScore,
-}) => {
+const MemoryGameBoard = ({ startGame, setStartGame }) => {
+  const [level, setLevel] = useState(1);
   const [charNaruto, setCharNaruto] = useState([]);
   const [selectedCharId, setSelectedCharId] = useState([]);
-  const [level, setLevel] = useState(1);
+
+  const [currentScore, setCurrentScore] = useState(0);
+  const [bestScore, setBestScore] = useState(0);
 
   useEffect(() => {
     const getCharNaruto = async () => {
@@ -40,15 +36,25 @@ const MemoryGameBoard = ({
       }
     };
     getCharNaruto();
-    return setCharNaruto([]);
+    return setCharNaruto([]), setSelectedCharId([]);
   }, [startGame, level]);
 
-  const newCharReshuffle = _.shuffle(charNaruto);
+  useEffect(() => {
+    if (
+      _.uniq(selectedCharId).length === selectedCharId.length &&
+      selectedCharId.length > 0
+    ) {
+      setCurrentScore((prev) => prev + 1);
+    }
+  }, [selectedCharId]);
 
-  function handleCurrentScore() {
-    _.uniq(selectedCharId).length === selectedCharId.length &&
-      setCurrentScore(currentScore + 1);
-  }
+  useEffect(() => {
+    if (currentScore > bestScore) {
+      setBestScore(currentScore);
+    }
+  }, []);
+
+  const newCharReshuffle = _.shuffle(charNaruto);
   return (
     <React.Fragment>
       <div className="absolute bg-slate-800 opacity-80 p-5 top-5 left-5 rounded-lg text-slate-200 text-lg font-semibold tracking-wider">
@@ -57,29 +63,17 @@ const MemoryGameBoard = ({
       </div>
       <div className="h-screen flex justify-center items-center">
         {_.uniq(selectedCharId).length !== selectedCharId.length ? (
-          <FailedModal
-            setLevel={setLevel}
-            bestScore={bestScore}
-            setBestScore={setBestScore}
-            setStartGame={setStartGame}
-            currentScore={currentScore}
-            setCurrentScore={setCurrentScore}
-          />
+          <FailedModal setLevel={setLevel} setStartGame={setStartGame} />
         ) : _.uniq(selectedCharId).length === selectedCharId.length &&
           selectedCharId.length === newCharReshuffle.length &&
           selectedCharId.length > 0 ? (
-          <SuccessModal
-            level={level}
-            setLevel={setLevel}
-            setSelectedCharId={setSelectedCharId}
-          />
+          <SuccessModal level={level} setLevel={setLevel} />
         ) : (
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-3">
             <MemoryGameList
               charNaruto={newCharReshuffle}
               selectedCharId={selectedCharId}
               setSelectedCharId={setSelectedCharId}
-              handleCurrentScore={handleCurrentScore}
             />
           </div>
         )}
