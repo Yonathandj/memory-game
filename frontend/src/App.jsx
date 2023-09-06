@@ -5,10 +5,17 @@ import MemoryGameBoard from "./components/MemoryGameBoard";
 
 function App() {
   const [startGame, setStartGame] = useState(false);
+  const [bestScore, setBestScore] = useState(0);
+
   return (
     <React.Fragment>
       {startGame ? (
-        <MemoryGameBoard startGame={startGame} setStartGame={setStartGame} />
+        <MemoryGameBoard
+          startGame={startGame}
+          setStartGame={setStartGame}
+          bestScore={bestScore}
+          setBestScore={setBestScore}
+        />
       ) : (
         <StartGame setStartGame={setStartGame} />
       )}

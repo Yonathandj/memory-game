@@ -6,13 +6,23 @@ import FailedModal from "./FailedModal";
 import SuccessModal from "./SuccessModal";
 import MemoryGameList from "./MemoryGameList";
 
-const MemoryGameBoard = ({ startGame, setStartGame }) => {
+const MemoryGameBoard = ({
+  startGame,
+  setStartGame,
+  bestScore,
+  setBestScore,
+}) => {
   const [level, setLevel] = useState(1);
   const [charNaruto, setCharNaruto] = useState([]);
   const [selectedCharId, setSelectedCharId] = useState([]);
 
   const [currentScore, setCurrentScore] = useState(0);
-  const [bestScore, setBestScore] = useState(0);
+
+  const HandleBestScore = () => {
+    currentScore > bestScore && setBestScore(currentScore);
+  };
+
+  console.log(bestScore);
 
   useEffect(() => {
     const getCharNaruto = async () => {
@@ -48,13 +58,8 @@ const MemoryGameBoard = ({ startGame, setStartGame }) => {
     }
   }, [selectedCharId]);
 
-  useEffect(() => {
-    if (currentScore > bestScore) {
-      setBestScore(currentScore);
-    }
-  }, []);
-
   const newCharReshuffle = _.shuffle(charNaruto);
+
   return (
     <React.Fragment>
       <div className="absolute bg-slate-800 opacity-80 p-5 top-5 left-5 rounded-lg text-slate-200 text-lg font-semibold tracking-wider">
@@ -63,11 +68,19 @@ const MemoryGameBoard = ({ startGame, setStartGame }) => {
       </div>
       <div className="h-screen flex justify-center items-center">
         {_.uniq(selectedCharId).length !== selectedCharId.length ? (
-          <FailedModal setLevel={setLevel} setStartGame={setStartGame} />
+          <FailedModal
+            setLevel={setLevel}
+            setStartGame={setStartGame}
+            HandleBestScore={HandleBestScore}
+          />
         ) : _.uniq(selectedCharId).length === selectedCharId.length &&
           selectedCharId.length === newCharReshuffle.length &&
           selectedCharId.length > 0 ? (
-          <SuccessModal level={level} setLevel={setLevel} />
+          <SuccessModal
+            level={level}
+            setLevel={setLevel}
+            HandleBestScore={HandleBestScore}
+          />
         ) : (
           <div className="grid grid-cols-3 gap-3">
             <MemoryGameList

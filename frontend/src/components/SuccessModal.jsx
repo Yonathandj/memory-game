@@ -1,6 +1,6 @@
 import React from "react";
 
-const SuccessModal = ({ level, setLevel }) => {
+const SuccessModal = ({ level, setLevel, HandleBestScore }) => {
   return (
     <React.Fragment>
       <div className="fixed top-0 left-0 right-0 bottom-0 bg-slate-600 opacity-80">
@@ -19,6 +19,7 @@ const SuccessModal = ({ level, setLevel }) => {
               className="bg-slate-100 px-6 py-2 text-base rounded-lg mx-auto font-semibold active:bg-slate-900 active:text-slate-100 tracking-wide"
               onClick={() => {
                 setLevel(level + 1);
+                HandleBestScore();
               }}
             >
               Continue
